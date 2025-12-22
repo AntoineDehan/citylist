@@ -1,9 +1,12 @@
 import { useState } from "react";
 
-function Searchbar({ searchInput, setSearchInput }) {
-  function handleInput(event) {
-    setSearchInput(event.target.value);
-    console.log(searchInput);
+function Searchbar({ setSearchInput }) {
+  const [inputValue, setInputValue] = useState("");
+
+  function handleSearch() {
+    if (inputValue === "") return;
+    setSearchInput(inputValue);
+    console.log("click input");
   }
 
   return (
@@ -13,9 +16,10 @@ function Searchbar({ searchInput, setSearchInput }) {
           type="text"
           name="search"
           id="search"
-          value={searchInput}
-          onChange={handleInput}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
+        <button onClick={handleSearch}>Recherche</button>
       </div>
     </>
   );
