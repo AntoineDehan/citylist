@@ -1,0 +1,13 @@
+.card {
+  display: flex;
+  flex-direction: row;
+  border: 2px #c9c9c9 solid;
+  border-radius: 5px;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+}
+.card:hover {
+  cursor: pointer;
+}

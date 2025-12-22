@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Card from "../card/card";
 
+import "../../styles/list/style.css";
+
 function List({ searchInput }) {
   const [adresses, setAdresses] = useState([]);
 
@@ -25,11 +27,11 @@ function List({ searchInput }) {
   }, [searchInput]);
 
   return (
-    <>
+    <div className="list-results">
       {adresses?.map((adresse, index) => {
         return <Card data={adresse} key={index} />;
       })}
-    </>
+    </div>
   );
 }
 

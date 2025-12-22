@@ -1,27 +1,30 @@
 import { useState } from "react";
+import "../../styles/searchbar/style.css";
 
 function Searchbar({ setSearchInput }) {
   const [inputValue, setInputValue] = useState("");
 
-  function handleSearch() {
-    if (inputValue === "") return;
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (!inputValue.trim()) return;
     setSearchInput(inputValue);
-    console.log("click input");
+    console.log("Recherche lancée :", inputValue);
   }
 
   return (
-    <>
-      <div>
-        <input
-          type="text"
-          name="search"
-          id="search"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button onClick={handleSearch}>Recherche</button>
-      </div>
-    </>
+    <form className="searchbar-container" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="search"
+        id="search"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Rechercher une adresse..."
+      />
+      <button type="submit" className="searchbar-search">
+        O
+      </button>
+    </form>
   );
 }
 
