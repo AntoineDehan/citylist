@@ -9,12 +9,12 @@ function List({ searchInput }) {
     const init = async () => {
       try {
         const res = await fetch(
-          `https://api-adresse.data.gouv.fr/search/?q=${searchInput}`
+          `https://api-adresse.data.gouv.fr/search/?q=${searchInput.toLowerCase()}`
         );
         if (res.ok) {
           const data = await res.json();
-          setAdresses(data);
-          console.log("done", data);
+          setAdresses(data.features);
+          console.log("done", data.features);
         }
       } catch (error) {
         console.log(error);
@@ -25,11 +25,16 @@ function List({ searchInput }) {
 
   return (
     <>
-      {/* {adresses.map((adresse) => {
-        <div>
-          <h2>test card</h2>
-        </div>;
-      })} */}
+      {adresses?.map((adresse, index) => {
+        return (
+          <div key={index}>
+            <h2>
+              {adresse.properties.street} {adresse.properties.city}{" "}
+              {adresse.properties.postcode}
+            </h2>
+          </div>
+        );
+      })}
     </>
   );
 }
