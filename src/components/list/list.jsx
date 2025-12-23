@@ -17,7 +17,7 @@ function List({ searchInput }) {
       setAdresses([]);
       try {
         const res = await fetch(
-          `https://api-adresse.data.gouv.fr/search/?q=${searchInput.toLowerCase()}`
+          `https://api-adresse.data.gouv.fr/search/?q=${searchInput}`
         );
 
         if (!res.ok)
@@ -29,6 +29,7 @@ function List({ searchInput }) {
           setError(`Aucune adresse trouvée pour "${searchInput}".`);
           setAdresses([]);
           setIsLoading(false);
+          return;
         }
 
         setAdresses(data.features);
@@ -42,20 +43,22 @@ function List({ searchInput }) {
     init();
   }, [searchInput]);
 
+  // Affichage chargement
   if (isLoading) {
     return <h3>Chargement des résultats...</h3>;
   }
 
+  // Affichage erreur
   if (error) {
     return <h3>{error}</h3>;
   }
 
   return (
-    <div className="list-results">
+    <ul className="list-results">
       {adresses?.map((adresse, index) => {
         return <Card data={adresse} key={index} />;
       })}
-    </div>
+    </ul>
   );
 }
 
