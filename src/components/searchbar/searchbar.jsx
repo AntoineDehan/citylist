@@ -17,6 +17,7 @@ function Searchbar({ setSearchInput }) {
         type="text"
         name="search"
         id="search"
+        minLength={3}
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="Rechercher une adresse..."
