@@ -6,41 +6,56 @@ import "../../styles/list/style.css";
 function List({ searchInput }) {
   const [adresses, setAdresses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   //Appel API après l'input
   useEffect(() => {
     if (searchInput === "") return;
     const init = async () => {
       setIsLoading(true);
+      setError(null);
+      setAdresses([]);
       try {
         const res = await fetch(
           `https://api-adresse.data.gouv.fr/search/?q=${searchInput.toLowerCase()}`
         );
-        if (res.ok) {
-          const data = await res.json();
-          setAdresses(data.features);
-          console.log("done", data.features);
+
+        if (!res.ok)
+          return setError("Erreur lors de la récupération de l'API.");
+
+        const data = await res.json();
+
+        if (!data.features || data.features.length === 0) {
+          setError(`Aucune adresse trouvée pour "${searchInput}".`);
+          setAdresses([]);
           setIsLoading(false);
         }
-      } catch (error) {
-        console.log(error);
+
+        setAdresses(data.features);
+        setIsLoading(false);
+      } catch (err) {
+        setError("API non disponnible. Veuillez réessayer plus tard.");
+        setIsLoading(false);
+        console.log(err);
       }
     };
     init();
   }, [searchInput]);
 
+  if (isLoading) {
+    return <h3>Chargement des résultats...</h3>;
+  }
+
+  if (error) {
+    return <h3>{error}</h3>;
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <p>Chargement des résultats</p>
-      ) : (
-        <div className="list-results">
-          {adresses?.map((adresse, index) => {
-            return <Card data={adresse} key={index} />;
-          })}
-        </div>
-      )}
-    </>
+    <div className="list-results">
+      {adresses?.map((adresse, index) => {
+        return <Card data={adresse} key={index} />;
+      })}
+    </div>
   );
 }
 
