@@ -35,7 +35,7 @@ function List({ searchInput }) {
         setAdresses(data.features);
         setIsLoading(false);
       } catch (err) {
-        setError("API non disponnible. Veuillez réessayer plus tard.");
+        setError("API non disponible. Veuillez réessayer plus tard.");
         setIsLoading(false);
         console.log(err);
       }
