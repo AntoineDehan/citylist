@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Search } from "lucide-react";
+
 import "../../styles/searchbar/style.css";
 
 function Searchbar({ setSearchInput }) {
@@ -7,8 +9,7 @@ function Searchbar({ setSearchInput }) {
   function handleSubmit(event) {
     event.preventDefault();
     if (!inputValue.trim()) return;
-    setSearchInput(inputValue);
-    console.log("Recherche lancée :", inputValue);
+    setSearchInput(inputValue.toLowerCase());
   }
 
   return (
@@ -23,7 +24,7 @@ function Searchbar({ setSearchInput }) {
         placeholder="Rechercher une adresse..."
       />
       <button type="submit" className="searchbar-search">
-        O
+        <Search size={18} />
       </button>
     </form>
   );
