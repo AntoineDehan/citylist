@@ -1,11 +1,35 @@
 import "../../styles/card/style.css";
 
-function Card({ data }) {
+interface FeatureProperties {
+  label: string;
+  city: string;
+  postcode: string;
+  street?: string;
+  name?: string;
+}
+
+interface FeatureGeometry {
+  type: "Point";
+  coordinates: [number, number];
+}
+
+interface Feature {
+  type: "Feature";
+  geometry: FeatureGeometry;
+  properties: FeatureProperties;
+}
+
+interface CardProps {
+  data: Feature;
+}
+
+function Card({ data }: CardProps) {
+  console.log("data de card ici: ", data);
   function handleClick() {
     const { street, city, postcode } = data.properties;
     const fullAddress = `${street}, ${postcode} ${city}`;
     const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      fullAddress
+      fullAddress,
     )}`;
     window.open(googleMapsUrl, "_blank");
   }

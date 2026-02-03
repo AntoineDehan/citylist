@@ -1,12 +1,17 @@
 import { useState } from "react";
+import type { SubmitEvent } from "react";
 import { Search } from "lucide-react";
 
 import "../../styles/searchbar/style.css";
 
-function Searchbar({ setSearchInput }) {
+interface SearchProps {
+  setSearchInput: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function Searchbar({ setSearchInput }: SearchProps) {
   const [inputValue, setInputValue] = useState("");
 
-  function handleSubmit(event) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!inputValue.trim()) return;
     setSearchInput(inputValue.toLowerCase());

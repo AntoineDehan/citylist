@@ -1,5 +1,5 @@
 import List from "../../components/list/list.jsx";
-import Searchbar from "../../components/searchbar/searchbar.jsx";
+import Searchbar from "../../components/searchbar/searchbar.js";
 import { useState } from "react";
 
 import "../../styles/home/style.css";
