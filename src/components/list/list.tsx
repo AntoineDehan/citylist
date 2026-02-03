@@ -1,47 +1,13 @@
 import { useEffect, useState } from "react";
 import Card from "../card/card";
+import { searchAdress } from "../../api";
+import type { Feature } from "../../api";
 
 import "../../styles/list/style.css";
 
-interface ListProps {
+type ListProps = {
   searchInput: string;
-}
-
-interface FeatureProperties {
-  label: string;
-  score: number;
-  id: string;
-  name: string;
-  postcode: string;
-  citycode: string;
-  x: number;
-  y: number;
-  city: string;
-  context: string;
-  type: string;
-  importance: number;
-  street?: string;
-  _type: string;
-  banId?: string;
-  locality?: string;
-}
-
-interface FeatureGeometry {
-  type: "Point";
-  coordinates: [number, number];
-}
-
-interface Feature {
-  type: "Feature";
-  geometry: FeatureGeometry;
-  properties: FeatureProperties;
-}
-
-interface FeatureCollection {
-  type: "FeatureCollection";
-  features: Feature[];
-  query: string;
-}
+};
 
 function List({ searchInput }: ListProps) {
   const [adresses, setAdresses] = useState<Feature[]>([]);
@@ -55,33 +21,28 @@ function List({ searchInput }: ListProps) {
       setIsLoading(true);
       setError("");
       setAdresses([]);
-      try {
-        const res = await fetch(
-          `https://api-adresse.data.gouv.fr/search/?q=${searchInput}`,
-        );
 
-        if (!res.ok)
-          return setError("Erreur lors de la récupération de l'API.");
+      const { error, data } = await searchAdress(searchInput);
 
-        const data: FeatureCollection = await res.json();
-        console.log("data here:", data);
-
-        if (!data.features || data.features.length === 0) {
-          setError(`Aucune adresse trouvée pour "${searchInput}".`);
-          setAdresses([]);
-          setIsLoading(false);
-          return;
-        }
-
-        setAdresses(data.features);
+      if (!data) {
+        setError("Aucune réponse de l'API");
         setIsLoading(false);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError("API non disponible. Veuillez réessayer plus tard.");
-          setIsLoading(false);
-          console.log(err);
-        }
+        return;
       }
+
+      if (!data.features || data.features.length === 0) {
+        setError(`Aucune adresse trouvée pour "${searchInput}".`);
+        return;
+      }
+
+      if (error) {
+        setError(error);
+        setIsLoading(false);
+        return;
+      }
+
+      setAdresses(data.features);
+      setIsLoading(false);
     };
     init();
   }, [searchInput]);

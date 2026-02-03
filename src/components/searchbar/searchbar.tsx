@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { SubmitEvent } from "react";
 import { Search } from "lucide-react";
+
+import { searchTimeout } from "../../util";
 
 import "../../styles/searchbar/style.css";
 
@@ -10,6 +12,16 @@ interface SearchProps {
 
 function Searchbar({ setSearchInput }: SearchProps) {
   const [inputValue, setInputValue] = useState("");
+
+  /*   let timeOutId: number;
+   */
+  useEffect(() => {
+    /*     timeOutId = setTimeout(() => {
+      setSearchInput(inputValue.toLocaleLowerCase());
+    }, 2000);
+    return () => clearTimeout(timeOutId); */
+    searchTimeout(setSearchInput, inputValue);
+  }, [inputValue]);
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
