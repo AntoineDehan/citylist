@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { SubmitEvent } from "react";
 import { Search } from "lucide-react";
 
-import { searchTimeout } from "../../util";
-
 import "../../styles/searchbar/style.css";
+import { useDebounce } from "../../hooks/useDebounce";
 
 interface SearchProps {
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
@@ -12,16 +11,13 @@ interface SearchProps {
 
 function Searchbar({ setSearchInput }: SearchProps) {
   const [inputValue, setInputValue] = useState("");
+  const debouncedInputValue = useDebounce(inputValue, 2000);
 
-  /*   let timeOutId: number;
-   */
   useEffect(() => {
-    /*     timeOutId = setTimeout(() => {
-      setSearchInput(inputValue.toLocaleLowerCase());
-    }, 2000);
-    return () => clearTimeout(timeOutId); */
-    searchTimeout(setSearchInput, inputValue);
-  }, [inputValue]);
+    if (inputValue.length >= 3) {
+      setSearchInput(debouncedInputValue);
+    }
+  }, [debouncedInputValue]);
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
