@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Card from "../card/card";
 import { searchAdress } from "../../api";
-import type { Feature } from "../../api";
+import type { Feature, FeatureCollection } from "../../api";
+
+import { useQuery, QueryClient } from "@tanstack/react-query";
 
 import "../../styles/list/style.css";
 
@@ -9,57 +11,40 @@ type ListProps = {
   searchInput: string;
 };
 
+// type QueryData = {
+//   isPending: boolean;
+//   isError: Error;
+//   data: FeatureCollection;
+// };
+
+const queryClient = new QueryClient();
+
 function List({ searchInput }: ListProps) {
-  const [adresses, setAdresses] = useState<Feature[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  //Appel API après l'input
-  useEffect(() => {
-    if (searchInput === "") return;
-    const init = async () => {
-      setIsLoading(true);
-      setError("");
-      setAdresses([]);
-
-      const { error, data } = await searchAdress(searchInput);
-
-      if (!data) {
-        setError("Aucune réponse de l'API");
-        setIsLoading(false);
-        return;
-      }
-
-      if (!data.features || data.features.length === 0) {
-        setError(`Aucune adresse trouvée pour "${searchInput}".`);
-        return;
-      }
-
-      if (error) {
-        setError(error);
-        setIsLoading(false);
-        return;
-      }
-
-      setAdresses(data.features);
-      setIsLoading(false);
-    };
-    init();
-  }, [searchInput]);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ["adresses", searchInput],
+    queryFn: () => searchAdress(searchInput),
+    // enabled: searchInput === "" ? false : true,
+    enabled: searchInput !== "",
+  });
 
   // Affichage chargement
-  if (isLoading) {
+  if (isPending) {
     return <h3>Chargement des résultats...</h3>;
   }
 
   // Affichage erreur
-  if (error.length >= 2) {
-    return <h3>{error}</h3>;
+  if (isError) {
+    return <h3>{error.message}</h3>;
   }
 
+  if (!data.features || data.features.length === 0) {
+    return <h3>Aucune adresse trouvée pour "${searchInput}</h3>;
+  }
+
+  const resultats = data.features;
   return (
     <ul className="list-results">
-      {adresses?.map((adresse, index) => {
+      {resultats?.map((adresse, index) => {
         return <Card data={adresse} key={index} />;
       })}
     </ul>

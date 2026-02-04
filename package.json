@@ -12,6 +12,8 @@
     "deploy": "gh-pages -d dist -b gh-pages -r https://github.com/AntoineDehan/citylist.git"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.20",
+    "@tanstack/react-query-devtools": "^5.91.3",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

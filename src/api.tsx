@@ -1,3 +1,5 @@
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 export type Respone = {
   error?: string;
   data?: FeatureCollection;
@@ -39,29 +41,36 @@ export type FeatureCollection = {
   query: string;
 };
 
-export type ApiResponse = {
-  error?: string;
-  data?: FeatureCollection;
-};
+export async function searchAdress(searchInput: string) {
+  const res = await fetch(
+    `https://api-adresse.data.gouv.fr/search/?q=${searchInput}`,
+  );
 
-export async function searchAdress(searchInput: string): Promise<ApiResponse> {
-  try {
-    const res = await fetch(
-      `https://api-adresse.data.gouv.fr/search/?q=${searchInput}`,
-    );
+  if (!res.ok) throw new Error("Erreur lors de la récupération de l'Api.");
 
-    if (!res.ok) return { error: "Erreur lors de la récupération de l'Api." };
+  const data: FeatureCollection = await res.json();
 
-    const data: FeatureCollection = await res.json();
-
-    return { data };
-    // Success
-  } catch (err) {
-    console.log(err);
-    return {
-      error: "API non disponible. Veuillez réessayer plus tard.",
-    };
-  }
+  return data;
 }
+
+// export async function searchAdress(searchInput: string): Promise<ApiResponse> {
+//   try {
+//     const res = await fetch(
+//       `https://api-adresse.data.gouv.fr/search/?q=${searchInput}`,
+//     );
+
+//     if (!res.ok) return { error: "Erreur lors de la récupération de l'Api." };
+
+//     const data: FeatureCollection = await res.json();
+
+//     return { data };
+//     // Success
+//   } catch (err) {
+//     console.log(err);
+//     return {
+//       error: "API non disponible. Veuillez réessayer plus tard.",
+//     };
+//   }
+// }
 
 export default searchAdress;
