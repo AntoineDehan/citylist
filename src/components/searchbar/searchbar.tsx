@@ -1,9 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
 import type { SubmitEvent } from "react";
 import { Search } from "lucide-react";
 
 import "../../styles/searchbar/style.css";
-import { useDebounce } from "../../hooks/useDebounce";
 
 interface SearchProps {
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
@@ -11,7 +11,7 @@ interface SearchProps {
 
 function Searchbar({ setSearchInput }: SearchProps) {
   const [inputValue, setInputValue] = useState("");
-  const debouncedInputValue = useDebounce(inputValue, 2000);
+  const debouncedInputValue = useDebounce(inputValue, 1000);
 
   useEffect(() => {
     if (inputValue.length >= 3) {

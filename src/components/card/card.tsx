@@ -1,23 +1,6 @@
+import type { Feature } from "../../api";
+
 import "../../styles/card/style.css";
-
-interface FeatureProperties {
-  label: string;
-  city: string;
-  postcode: string;
-  street?: string;
-  name?: string;
-}
-
-interface FeatureGeometry {
-  type: "Point";
-  coordinates: [number, number];
-}
-
-interface Feature {
-  type: "Feature";
-  geometry: FeatureGeometry;
-  properties: FeatureProperties;
-}
 
 interface CardProps {
   data: Feature;
