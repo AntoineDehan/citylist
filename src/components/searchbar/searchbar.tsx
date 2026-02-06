@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import type { SubmitEvent } from "react";
-import { Search } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 
-import "../../styles/searchbar/style.css";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 
 interface SearchProps {
   setSearchInput: React.Dispatch<React.SetStateAction<string>>;
@@ -26,19 +30,25 @@ function Searchbar({ setSearchInput }: SearchProps) {
   }
 
   return (
-    <form className="searchbar-container" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="search"
-        id="search"
-        minLength={3}
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Rechercher une adresse..."
-      />
-      <button type="submit" className="searchbar-search">
-        <Search size={18} />
-      </button>
+    <form
+      className="searchbar-container mt-3 flex h-11 w-full justify-center gap-5"
+      onSubmit={handleSubmit}
+    >
+      <InputGroup className="min-w-2xl h-full border-2">
+        <InputGroupInput
+          type="text"
+          name="search"
+          id="search"
+          minLength={3}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Rechercher une adresse..."
+          className="text-2xl!"
+        />
+        <InputGroupAddon>
+          <SearchIcon size={40} />
+        </InputGroupAddon>
+      </InputGroup>
     </form>
   );
 }
